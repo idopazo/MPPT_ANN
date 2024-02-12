@@ -45,8 +45,12 @@ for i=1:size(filenames,1)
     end
     t(:,4)=datos_og(:,4);
      t(:,5)=datos_og(:,6);
+     t(:,6)=datos_og(:,2);
     t=renamevars(t,'Var4','Ir_total');
      t=renamevars(t,'Var5','Ir_difusa');
+     t=renamevars(t,'Var6','Temperatura');
+     direccion=fullfile(direccion,'datos_tip_year.csv');
+     writetable(t,direccion)
 end
 
 
