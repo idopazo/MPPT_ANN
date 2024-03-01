@@ -29,26 +29,21 @@ for i=1:n_it
         Ir(j)=Ir_difusa+(Ir_total-Ir_difusa)*rand;
         T(j)=Tamb+Ir(j)*((Tnoc-20)/800);
     end
+    
+   
     out=sim('Obtencion_Datos');
     if i==1
         V_mod=[out.V1,out.V2,out.V3,out.V4,out.V5];
         I_mod=[out.I1,out.I2,out.I3,out.I4,out.I5];
-        for k=1:size(out.V1,1)
-        Ir_mod(k,:)=Ir;
-        T_mod(k,:)=T;
-        end 
+        for k=1:size(out.V1.1)
+        Ir_mod(=Ir;
     else
          aux_V_mod=[out.V1,out.V2,out.V3,out.V4,out.V5];
          V_mod=[V_mod; aux_V_mod];
          aux_I_mod=[out.I1,out.I2,out.I3,out.I4,out.I5];
           I_mod=[I_mod; aux_I_mod];
-          for k=1:size(out.V1,1)
-              aux_Ir_mod(k,:)=Ir;
-              aux_T_mod(k,:)=T;
-          end
-          
+          aux_Ir_mod=Ir;
          Ir_mod=[Ir_mod; aux_Ir_mod];
-         T_mod=[T_mod; aux_T_mod];
     end 
     
     
@@ -64,14 +59,10 @@ for i=1:n_it
 %     I3(i,:)=out.I3;
 %     I4(i,:)=out.I4;
 %     I5(i,:)=out.I5;
-   clear aux_I_mod aux_Ir_mod aux_V_mod Ir T out
+   clear aux_I_mod aux_Ir_mod aux_V_mod Ir T
 end
 tend=toc(Tstart);
 fprintf('tiempo= %f',tend);
-writetable(array2table(V_mod),'./Datos/V_mod.csv');
-writetable(array2table(I_mod),'./Datos/I_mod.csv');
-writetable(array2table(Ir_mod),'./Datos/Ir_mod.csv');
-writetable(array2table(T_mod),'./Datos/T_mod.csv');
 
 %T=Tamb+G*(Tnoc-20)/800;
 
