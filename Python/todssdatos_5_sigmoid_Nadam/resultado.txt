@@ -1,0 +1,6 @@
+error medio 1.14 W
+Error porcentual 9.54%
+
+28310
+meap=4%
+0.45W

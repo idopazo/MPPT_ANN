@@ -1,0 +1,10 @@
+28310
+maep=14.445
+mae=1,44
+maev= 1.27
+maevp= 42%
+210500
+meap=10
+mae1.32
+maev=1.32
+maepv2=38%

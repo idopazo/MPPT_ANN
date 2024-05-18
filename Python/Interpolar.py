@@ -65,37 +65,57 @@ def read_datos(file_tbl, file_csv):
    
 prueba_pmp, vectores_data_I, pruebaresults_Vmp,curvavsample= read_datos(".\shadowandframeDef.tbl", "shadowandframeDef_pmp.csv")
 
-# indicespredicciones=range(5000,6000)
+indicespredicciones=range(210500,214500)
 
-# model=keras.models.load_model('todos_losdatos_8_elu_Adam.keras')
-# data_V=curvavsample
-# data_I=vectores_data_I[indicespredicciones]
+model=keras.models.load_model('1tanh1elutodoslosdatosNadam.keras')
+data_V=curvavsample
+data_I=vectores_data_I[indicespredicciones]
 
-# predicciones = []
-# array_verdadero = []
+predicciones = []
+array_verdadero = []
+vpredicha=[]
 
-# for muestra_i in data_I:
-#     # Seleccionar 5 índices aleatorios de data_I
-#     indices = np.random.choice(50, size=5, replace=False)  # Ejemplo: seleccionar 5 índices aleatorios
-#     indices = sorted(indices)  # Ordenar los índices para asegurar la correspondencia
+for muestra_i in data_I:
+    # Seleccionar 5 índices aleatorios de data_I
+    indices = np.arange(0, 50, 10)  # Ejemplo: seleccionar 5 índices aleatorios
+    indices = sorted(indices)  # Ordenar los índices para asegurar la correspondencia
 
-#     # Seleccionar los valores correspondientes de data_I y data_V
-#     subconjunto_i = muestra_i[indices]
-#     subconjunto_v = data_V[indices]
+    # Seleccionar los valores correspondientes de data_I y data_V
+    subconjunto_i = muestra_i[indices]
+    subconjunto_v = data_V[indices]
 
-#     # Formatear los datos para el modelo de Keras
+    # Formatear los datos para el modelo de Keras
     
-#     entrada_modelo = np.array([[subconjunto_i, subconjunto_v]])  # Formato requerido por el modelo
-#     for entrada in entrada_modelo:
-#         # Predicción con el modelo de Keras
-#         prediccion = model.predict(entrada)
-#         # Agregar las predicciones a la lista de predicciones
-#         resultado_interpolacion = interpolar(data_V, muestra_I, prediccion)
-#     # Almacenar la predicción y el valor verdadero de VMP
-#         predicciones.append(resultado_interpolacion*entrada[0][1])
+      # Formato requerido por el modelo
+    for i,v in zip (subconjunto_i,subconjunto_v):
+        # Predicción con el modelo de Keras
+        entrada_modelo = np.array([[i, v]])
+        prediccion = model.predict(entrada_modelo)
+        # Agregar las predicciones a la lista de predicciones
+        vpredicha.append(prediccion[0])
+        resultado_interpolacion = interpolar(data_V, muestra_i, prediccion)
+    # Almacenar la predicción y el valor verdadero de VMP
+        predicciones.append(resultado_interpolacion*prediccion)
    
 
   
 
-#     # Agregar el valor verdadero de VMP a la lista de valores verdaderos
-#     array_verdadero=prueba_pmp[indicespredicciones]  # Supongamos que el valor verdadero de VMP es el máximo de los valores de muestra_v
+    # Agregar el valor verdadero de VMP a la lista de valores verdaderos
+    array_verdadero=prueba_pmp[indicespredicciones]  # Supongamos que el valor verdadero de VMP es el máximo de los valores de muestra_v
+
+array_verdadero= np.repeat(array_verdadero, 5)
+predicciones=np.concatenate(predicciones)
+plt.plot(range(len(predicciones)), predicciones,label="predicciones")
+plt.xlabel('Instante')
+
+plt.ylabel('Potencia[W] maximas')
+plt.legend()
+plt.title('Potencia')
+plt.show()
+
+plt.plot(range(len(array_verdadero)), array_verdadero,label="Real")
+plt.xlabel('Instante')
+plt.ylabel('Potencia[W] maximas')
+plt.legend()
+plt.title('Potencia')
+plt.show()

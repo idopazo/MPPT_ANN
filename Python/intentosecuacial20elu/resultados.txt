@@ -1,0 +1,10 @@
+meap=9.9%
+mae=1.22W
+
+En el tramo 400-100 
+MAE=10 W
+MAPE= 20%
+
+En el tramo 3000 4000
+MAE=2.5W
+MAPE
