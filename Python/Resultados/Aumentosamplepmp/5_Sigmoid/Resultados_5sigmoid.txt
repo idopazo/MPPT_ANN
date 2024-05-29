@@ -1,0 +1,12 @@
+28310-3310
+mae= 0.43
+maep=3.9%
+maev=0.77
+maevp = 26%
+ energia real = 38,4 
+ energia producida = 36
+tramo210500
+mae.09
+maep 9.7
+maev=1.31
+maevp
