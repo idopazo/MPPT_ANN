@@ -142,7 +142,7 @@ indicespredicciones=range(1800,2400)
 #indicespredicciones=range(0,20000) #2 mins
 indicespredicciones=range(28310,33310)
 #indicespredicciones=range(210500,214500)
-model=keras.models.load_model('.\Modelo\5sigmoidnadaminterpolado_final.keras')
+model=keras.models.load_model('Modelos/5sigmoidnadaminterpolado_final.keras')
 data_V=curvavsample
 vectores_data_I=np.array(vectores_data_I)
 

@@ -230,28 +230,46 @@ pot_mod_list=[]
 
 prueba_pmp, vectores_data_I, pruebaresults_Vmp,curvavsample= read_datos(".\shadowandframeDef.tbl", "shadowandframeDef_pmp.csv")
 # Iterar sobre cada tramo y calcular las potencias P&O
+#%%
 for (frame_ini, frame_fin, delta_v) in tramos:
     eff_v, pot_po, v1,pot_mod,pot_ann = test_po(frame_ini, frame_fin, paso_v=delta_v, factor_submuestreo=1)
     eff_v_fijo, pot_po_fijo, v1_po_fijo,pot_mod,pot_an= test_po(frame_ini, frame_fin, paso_v=1, factor_submuestreo=1, v_fijo=True)
     pot_po_list.append(pot_po)
     # Aquí puedes incluir la lógica para crear las gráficas como se mostró anteriormente
     # Por ejemplo, puedes leer los datos reales y predichos como en el código anterior
-
-    # Crear el gráfico (ajustar según tu lógica de datos reales y predichos)
-    plt.figure(figsize=(fig_width, fig_height))
-    plt.plot(range(frame_ini, frame_fin), prueba_pmp[frame_ini: frame_fin],label='Potencia Real',linewidth="0.9")  # Ajustar según tus datos
-    plt.plot(range(frame_ini, frame_fin), pot_ann, label='ANN',linewidth="0.9")  # Ajustar según tus datos
-    plt.plot(range(frame_ini, frame_fin), pot_po, label=f'P&OΔV={delta_v}V  ',linewidth="0.9")
-    plt.plot(range(frame_ini, frame_fin), pot_po_fijo,label='Punto Fijo',linewidth="0.9")  # Ajustar según tus datos
     
-    plt.xlabel('Instante')
-    plt.ylabel('Potencia [W]')
-    plt.title(f'Potencias Tramo {frame_ini}-{frame_fin} ')
+  
+ 
     plt.legend()
    
     plt.show()
             
     titulo = f'{frame_ini}-{frame_fin}paso_v={delta_v}'
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+
+# Crear el plot
+    ax.plot(range(frame_ini, frame_fin), prueba_pmp[frame_ini: frame_fin],label='Potencia Real',linewidth="0.9")  # Ajustar según tus datos
+    ax.plot(range(frame_ini, frame_fin), pot_ann, label='ANN',linewidth="0.9")  # Ajustar según tus datos
+    ax.plot(range(frame_ini, frame_fin), pot_po, label=f'P&OΔV={delta_v}V  ',linewidth="0.9")
+    ax.plot(range(frame_ini, frame_fin), pot_po_fijo,label='Punto Fijo',linewidth="0.9")  # Ajustar según tus datos
+  
+ 
+
+# Título y etiquetas con fontsize especificado
+    ax.set_title(f'Potencias Tramo {frame_ini}-{frame_fin} ', fontsize=16)
+    ax.set_xlabel('Instante', fontsize=14)
+    ax.set_ylabel('Potencia [W]', fontsize=14)
+
+# Cambiar el tamaño de la fuente de las marcas de los ejes
+    ax.tick_params(axis='both', which='major', labelsize=12)
+
+# Leyenda con fontsize especificado
+    ax.legend(fontsize=12)
+
+# Mostrar el gráfico
+    plt.show()
+    # Crear el gráfico (ajustar según tu lógica de datos reales y predichos)
+    
     
     plt.savefig(titulo + '.png')
     eff_pot_po_fijo = pot_po_fijo[frame_ini:frame_fin:1].sum() / prueba_pmp[frame_ini:frame_fin:1].sum()
