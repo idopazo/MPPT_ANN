@@ -23,7 +23,6 @@ from keras import regularizers
 from keras.models import load_model
 from sklearn.metrics import mean_absolute_error
 
-import time
 def mppt_predict(model,datov,dato_I):
     entrada_modelo = np.array([[dato_I,datov]])
     vmp = model.predict(entrada_modelo)
@@ -129,7 +128,7 @@ def read_datos(file_tbl, file_csv):
 
 prueba_pmp, vectores_data_I, pruebaresults_Vmp,curvavsample= read_datos(".\shadowandframeDef.tbl", "shadowandframeDef_pmp.csv")
 #%%
-start_time=time.time()
+
 #dinamico
 #indicespredicciones=range(43000,43300)
 #bultitos
@@ -176,8 +175,7 @@ for muestra_i in data_I[1:]:
         # Agregar las predicciones a la lista de predicciones
         vpredicha1.append(prediccion_anteriorV[0])
         
-endtime=time.time()
-executiontime=endtime-start_time
+
 array_verdadero=prueba_pmp[indicespredicciones]  
 predarray=np.array(predicciones1)
 
@@ -250,76 +248,3 @@ print(f'eff={eff:.1%}')
 energiareal1=energiareal1/3600
 energiaproducido1=sum(predicciones1)*0.004
 energiaproducido1=energiaproducido1/3600
-#%%
-data_I=vectores_data_I[indicespredicciones2]
-indice_aleatorio = 35
-primerav=data_V[indice_aleatorio]
-primerai=data_I[0][indice_aleatorio]
-entrada_modelo = np.array([[primerai, primerav]])
-
-prediccion_anteriorV = model.predict(entrada_modelo)
-resultado_interpolacion = interpolar(data_V, data_I[0], prediccion_anteriorV)
-# Almacenar la predicción y el valor verdadero de VMP
-
-predicciones2.append(primerav*primerai)
-
-for muestra_i in data_I[1:]:
-        # Predicción con el modelo de Keras    
-        resultado_interpolacion = interpolar(data_V, muestra_i, prediccion_anteriorV)
-        prediccion_anteriorV = mppt_predict(model, prediccion_anteriorV[0][0], resultado_interpolacion[0][0])
-        resultado_interpolacion = interpolar(data_V, muestra_i, prediccion_anteriorV)
-        
-        predicciones2.append(resultado_interpolacion[0][0]*prediccion_anteriorV[0][0])
-        # Agregar las predicciones a la lista de predicciones
-        vpredicha2.append(prediccion_anteriorV[0])
-    # Agregar el valor verdadero de VMP a la lista de valores verdaderos
-
-array_verdadero=prueba_pmp[indicespredicciones2]  
-predarray=np.array(predicciones2)
-x_values = [indicespredicciones2[0] + i for i in range(len(predicciones2))]
-#%%
-plt.figure()
-plt.plot(x_values, predicciones2,label="Predicciones",linewidth="0.9")
-plt.xlabel('Instante')
-
-plt.ylabel('Potencia[W] ')
-plt.legend()
-plt.title('Potencia')
-plt.show()
-
-plt.plot(x_values, array_verdadero,label="Real",linewidth="0.9")
-plt.xlabel('Instante')
-plt.ylabel('Potencia[W] ')
-plt.legend()
-plt.title('Potencia')
-plt.show()
-
-
-
-vpredicha2.insert(0,vpredicha2[0])
-plt.figure()
-plt.plot(x_values, vpredicha2,label="Predicciones",linewidth="1")
-plt.xlabel('Instante')
-
-plt.ylabel('Tensión[V] ')
-plt.legend()
-plt.title('Tensión')
-plt.show()
-
-plt.plot(x_values, pruebaresults_Vmp[indicespredicciones2],label="Real",linewidth="1")
-plt.xlabel('Instante')
-plt.ylabel('Tensión[V] ')
-plt.legend()
-plt.title('Tensión')
-plt.show()
-#%%
-maev2 = mean_absolute_error(pruebaresults_Vmp[indicespredicciones2], vpredicha2)
-meapv2=np.mean( np.abs((pruebaresults_Vmp[indicespredicciones2]-vpredicha2)/pruebaresults_Vmp[indicespredicciones2]))
-energiareal2=sum(array_verdadero*0.004)
-energiareal2=energiareal2/3600
-
-energiaproducido2=sum(predarray*0.004)
-energiaproducido2=energiaproducido2/3600
-eff2=energiaproducido2/energiareal2
-mae2 = mean_absolute_error(array_verdadero, predicciones2)
-meap2=np.mean( np.abs((array_verdadero-predarray)/array_verdadero))
